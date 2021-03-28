@@ -8,41 +8,31 @@ export default class TableArea extends Component {
   state = {
     employees: [],
     filteredUsers: [],
+    currentSort: "default",
     query: "",
   };
 
   //handleSort function
-  useSortableData = (users, config = null) => {
-    const [sortedConfig, setSortConfig] = React.useState(config);
+  onSortChange = (tableColumn) => {
+    const { currentSort } = this.state;
+    let nextSort;
 
-    const sortedUsers = React.useMemo(() => {
-      let sortableUsers = [...users];
-      if (sortConfig !== null) {
-        sortableUsers.sort((a, b) => {
-          if (a[sortConfig.key] < b[sortConfig.key]) {
-            return sortedConfig.direction === "ascending" ? -1 : 1;
-          }
-          if (a[sortConfig.key] > b[sortConfig.key]) {
-            return sortConfig.direction === "ascending" ? 1 : -1;
-          }
-          return 0;
-        });
-      }
-      return sortableUsers;
-    }, [users, sortConfig]);
+    if (currentSort === "descending") nextSort = "ascending";
+    else if (currentSort === "ascending") nextSort = "default";
+    else if (currentSort === "default") nextSort = "descending";
 
-    const requestSort = (key) => {
-      let direction = "ascending";
-      if (
-        sortConfig &&
-        sortedConfig.key === key &&
-        sortedConfig.direction === "ascending"
-      ) {
-        direction = "descending";
+    this.setState({
+      currentSort: nextSort,
+    });
+    const userComparison = (a, b) => {
+      if (currentSort === "ascending") {
+        return a[tableColumn].first.localeCompare(b[tableColumn].first);
+      } else {
+        return b[tableColumn].first.localeCompare(a[tableColumn].first);
       }
-      setSortConfig({ key, direction });
     };
-    return { users: sortedUsers, requestSort, sortConfig };
+    const sortedUsers = currentSort.sort(userComparison);
+    this.setState({ currentSort: sortedUsers });
   };
 
   //Function being called which returns the comployees from the API within a componentDidMount

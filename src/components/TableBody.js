@@ -26,12 +26,6 @@ function TableBody({ employees }) {
           );
         }
       )}
-      {users.map((user) => (
-        <tr key={user.id}>
-          <td>{user.name}</td>
-          <td>${user.location}</td>
-        </tr>
-      ))}
     </tbody>
   );
 }

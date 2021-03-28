@@ -1,34 +1,30 @@
 import React from "react";
 import TableBody from "./TableBody";
-function Table({ employees }) {
+
+function Table({ employees, handleSort }) {
   return (
     <table>
       <thead>
         <tr>
-          <th>
-            <button
-              type="button"
-              onClick={() => requestSort("name")}
-              className={getClassNamesFor("name")}
-            >
-              Name
-            </button>
+          <th onClick={() => handleSort("name")}>
+            <button className="btn">Name</button>
           </th>
           <th>
-            <button
-              type="button"
-              onClick={() => requestSort("location")}
-              className={getClassNamesFor("location")}
-            >
-              Location
-            </button>
+            <button className="btn">Location</button>
           </th>
-          <th>Email Address</th>
-          <th>Phone No.</th>
+          <th>
+            {" "}
+            <button className="btn">Email Address</button>
+          </th>
+          <th>
+            {" "}
+            <button className="btn">Phone No.</button>
+          </th>
         </tr>
       </thead>
       <TableBody employees={employees} />
     </table>
   );
 }
+
 export default Table;
