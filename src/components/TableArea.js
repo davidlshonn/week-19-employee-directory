@@ -12,7 +12,38 @@ export default class TableArea extends Component {
   };
 
   //handleSort function
-  handleSort = () => {};
+  useSortableData = (users, config = null) => {
+    const [sortedConfig, setSortConfig] = React.useState(config);
+
+    const sortedUsers = React.useMemo(() => {
+      let sortableUsers = [...users];
+      if (sortConfig !== null) {
+        sortableUsers.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortedConfig.direction === "ascending" ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === "ascending" ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableUsers;
+    }, [users, sortConfig]);
+
+    const requestSort = (key) => {
+      let direction = "ascending";
+      if (
+        sortConfig &&
+        sortedConfig.key === key &&
+        sortedConfig.direction === "ascending"
+      ) {
+        direction = "descending";
+      }
+      setSortConfig({ key, direction });
+    };
+    return { users: sortedUsers, requestSort, sortConfig };
+  };
 
   //Function being called which returns the comployees from the API within a componentDidMount
   componentDidMount() {
@@ -53,9 +84,7 @@ export default class TableArea extends Component {
     );
     this.setState({ filteredUsers: filteredUsersList });
   };
-  //render two other components:
-  //SearchBar - takes a handleSearch function
-  //Table - takes the employees and a function called handleSort
+
   render() {
     return (
       <>

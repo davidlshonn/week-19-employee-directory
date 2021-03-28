@@ -5,8 +5,24 @@ function Table({ employees }) {
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Location</th>
+          <th>
+            <button
+              type="button"
+              onClick={() => requestSort("name")}
+              className={getClassNamesFor("name")}
+            >
+              Name
+            </button>
+          </th>
+          <th>
+            <button
+              type="button"
+              onClick={() => requestSort("location")}
+              className={getClassNamesFor("location")}
+            >
+              Location
+            </button>
+          </th>
           <th>Email Address</th>
           <th>Phone No.</th>
         </tr>
