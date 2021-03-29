@@ -17,21 +17,27 @@ export default class TableArea extends Component {
     const { currentSort } = this.state;
     let nextSort;
 
-    if (currentSort === "descending") nextSort = "ascending";
+    // if (currentSort === "descending") nextSort = "ascending";
+    // else if (currentSort === "ascending") nextSort = "default";
+    // else if (currentSort === "default") nextSort = "descending";
+
+    if (currentSort === "default") nextSort = "descending";
     else if (currentSort === "ascending") nextSort = "default";
-    else if (currentSort === "default") nextSort = "descending";
+    else if (currentSort === "descending") nextSort = "ascending";
 
     this.setState({
       currentSort: nextSort,
     });
     const userComparison = (a, b) => {
-      if (currentSort === "ascending") {
+      if (currentSort === "default") {
         return a[tableColumn].first.localeCompare(b[tableColumn].first);
-      } else {
+      } else if (currentSort === "descending") {
+        return b[tableColumn].first.localeCompare(a[tableColumn].first);
+      } else if (currentSort === "ascending") {
         return b[tableColumn].first.localeCompare(a[tableColumn].first);
       }
     };
-    const sortedUsers = currentSort.sort(userComparison);
+    const sortedUsers = this.state.employees.sort(userComparison);
     this.setState({ currentSort: sortedUsers });
   };
 
