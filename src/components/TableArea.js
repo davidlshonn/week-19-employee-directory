@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Table from "./Table";
 import API from "../utils/API";
 import SearchBar from "./SearchBar";
+import TableBody from "./TableBody";
 
 export default class TableArea extends Component {
   //Declare state to hold employees and filtered employees
@@ -83,7 +83,27 @@ export default class TableArea extends Component {
           handleFormSubmit={this.handleFormSubmit}
         />
         <h4>This is where the table etc will be</h4>
-        <Table employees={this.state.filteredUsers} />
+        <table>
+          <thead>
+            <tr>
+              <th onClick={() => this.onSortChange("name")}>
+                <button className="btn">Name</button>
+              </th>
+              <th>
+                <button className="btn">Location</button>
+              </th>
+              <th>
+                {" "}
+                <button className="btn">Email Address</button>
+              </th>
+              <th>
+                {" "}
+                <button className="btn">Phone No.</button>
+              </th>
+            </tr>
+          </thead>
+          <TableBody employees={this.state.employees} />
+        </table>
       </>
     );
   }
