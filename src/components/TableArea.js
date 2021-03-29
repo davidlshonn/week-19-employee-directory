@@ -8,37 +8,61 @@ export default class TableArea extends Component {
   state = {
     employees: [],
     filteredUsers: [],
-    currentSort: "default",
+    currentSort: "descend",
     query: "",
+    initialEmployees: [],
   };
 
   //handleSort function
+  //   onSortChange = (tableColumn) => {
+  //     const { currentSort } = this.state;
+  //     let nextSort;
+
+  //     if (currentSort === "default") nextSort = "descending";
+  //     else if (currentSort === "descending") nextSort = "ascending";
+  //     else if (currentSort === "ascending") nextSort = "default";
+
+  //     this.setState({
+  //       currentSort: nextSort,
+  //     });
+
+  //     if (nextSort === "default") {
+  //       this.setState({ employees: this.state.initialEmployees });
+  //     }
+
+  //     const userComparison = (a, b) => {
+  //       if (currentSort === "default") {
+  //         return a[tableColumn].first.localeCompare(b[tableColumn].first);
+  //       } else if (currentSort === "descending") {
+  //         return b[tableColumn].first.localeCompare(a[tableColumn].first);
+  //       } else if (currentSort === "ascending") {
+  //         return a[tableColumn].first.localeCompare(b[tableColumn].first);
+  //       }
+  //     };
+  //     const sortedUsers = this.state.employees.sort(userComparison);
+  //     this.setState({ initialEmployees: sortedUsers });
+  //   };
+
   onSortChange = (tableColumn) => {
-    const { currentSort } = this.state;
-    let nextSort;
-
-    // if (currentSort === "descending") nextSort = "ascending";
-    // else if (currentSort === "ascending") nextSort = "default";
-    // else if (currentSort === "default") nextSort = "descending";
-
-    if (currentSort === "default") nextSort = "descending";
-    else if (currentSort === "ascending") nextSort = "default";
-    else if (currentSort === "descending") nextSort = "ascending";
-
-    this.setState({
-      currentSort: nextSort,
-    });
+    console.log(tableColumn);
+    if (this.state.order === "default") {
+      this.setState({
+        order: "ascend",
+      });
+    } else {
+      this.setState({
+        order: "default",
+      });
+    }
     const userComparison = (a, b) => {
-      if (currentSort === "default") {
+      if (this.state.order === "ascend") {
         return a[tableColumn].first.localeCompare(b[tableColumn].first);
-      } else if (currentSort === "descending") {
-        return b[tableColumn].first.localeCompare(a[tableColumn].first);
-      } else if (currentSort === "ascending") {
+      } else {
         return b[tableColumn].first.localeCompare(a[tableColumn].first);
       }
     };
-    const sortedUsers = this.state.employees.sort(userComparison);
-    this.setState({ currentSort: sortedUsers });
+    const sortedUsers = this.state.filteredUsers.sort(userComparison);
+    this.setState({ initialEmployees: sortedUsers });
   };
 
   //Function being called which returns the comployees from the API within a componentDidMount
@@ -47,6 +71,7 @@ export default class TableArea extends Component {
       this.setState({
         employees: response.data.results,
         filteredUsers: response.data.results,
+        initialEmployees: response.data.results,
       });
     });
   }
@@ -83,34 +108,44 @@ export default class TableArea extends Component {
 
   render() {
     return (
-      <>
+      <div>
+        <br />
         <SearchBar
           handleInputChange={this.handleInputChange}
           handleFormSubmit={this.handleFormSubmit}
         />
-        <h4>This is where the table etc will be</h4>
-        <table>
+        <br />
+        <br />
+        <table style={{}}>
           <thead>
             <tr>
               <th onClick={() => this.onSortChange("name")}>
-                <button className="btn">Name</button>
+                <button className="btn" style={{ backgroundColor: "#eee" }}>
+                  Name
+                </button>
               </th>
               <th>
-                <button className="btn">Location</button>
+                <button className="btn" style={{ backgroundColor: "#eee" }}>
+                  Location
+                </button>
               </th>
               <th>
                 {" "}
-                <button className="btn">Email Address</button>
+                <button className="btn" style={{ backgroundColor: "#eee" }}>
+                  Email Address
+                </button>
               </th>
               <th>
                 {" "}
-                <button className="btn">Phone No.</button>
+                <button className="btn" style={{ backgroundColor: "#eee" }}>
+                  Phone No.
+                </button>
               </th>
             </tr>
           </thead>
           <TableBody employees={this.state.employees} />
         </table>
-      </>
+      </div>
     );
   }
 }
